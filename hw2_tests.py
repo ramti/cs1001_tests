@@ -95,7 +95,7 @@ def test_binary():
             TESTS_DIV.append(((bin1_str, bin2_str), int2bin(bin1 // bin2)))
 
     for cases, func in TESTS:
-        test(cases, func, max_time=1)
+        test(cases, func, max_time=10)
 
 
 def test_has_repeat():
