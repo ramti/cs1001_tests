@@ -1,9 +1,9 @@
 import time
 import random
-import hw2_12345678 as hw
+import hw2_316499359 as hw
 
 
-def test_with_time(cases, func):
+def test(cases, func, max_time=None):
     for args, expected_result in cases:
         func_pretty_name = f"{func.__name__}({', '.join(str(i) for i in args)})"
 
@@ -13,9 +13,10 @@ def test_with_time(cases, func):
         if result != expected_result:
             print(f"{func_pretty_name}: expected {expected_result}, got {result}")
 
-        elapsed_time = end - start
-        if elapsed_time >= 1:
-            print(f"{func_pretty_name}: took {elapsed_time} seconds")
+        if max_time is not None:
+            elapsed_time = end - start
+            if elapsed_time > max_time:
+                print(f"{func_pretty_name}: took {elapsed_time} seconds")
 
 
 def test_sum_divisors():
@@ -27,7 +28,7 @@ def test_sum_divisors():
         ((60, ), 108)
     ]
 
-    test_with_time(TESTS, hw.sum_divisors)
+    test(TESTS, hw.sum_divisors)
 
 
 def test_legal_par():
@@ -40,7 +41,7 @@ def test_legal_par():
         (("<<<{>>}>", ), False)
     ]
 
-    test_with_time(TESTS, hw.legal_par)
+    test(TESTS, hw.legal_par)
 
 
 def test_spiral_num():
@@ -50,7 +51,7 @@ def test_spiral_num():
         ((100001, ), 666691667100001)
     ]
 
-    test_with_time(TESTS, hw.spiral_sum)
+    test(TESTS, hw.spiral_sum)
 
 
 def int2bin(num):
@@ -94,7 +95,7 @@ def test_binary():
             TESTS_DIV.append(((bin1_str, bin2_str), int2bin(bin1 // bin2)))
 
     for cases, func in TESTS:
-        test_with_time(cases, func)
+        test(cases, func, max_time=1)
 
 
 def test_has_repeat():
@@ -110,8 +111,8 @@ def test_has_repeat():
         (("bcece", 2), True),
     ]
 
-    test_with_time(TESTS, hw.has_repeat1)
-    test_with_time(TESTS, hw.has_repeat2)
+    test(TESTS, hw.has_repeat1)
+    test(TESTS, hw.has_repeat2)
 
 
 def test_reading():
@@ -127,7 +128,7 @@ def test_reading():
         ((9, ), "31131211131221"),
     ]
 
-    test_with_time(TESTS, hw.reading)
+    test(TESTS, hw.reading)
 
 
 def test_max_div_seq():
@@ -138,7 +139,7 @@ def test_max_div_seq():
         ((1630860, 8), 2),
     ]
 
-    test_with_time(TESTS, hw.max_div_seq)
+    test(TESTS, hw.max_div_seq)
 
 
 def run_all_tests():
