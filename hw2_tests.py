@@ -1,6 +1,6 @@
 import time
 import random
-import hw2_316499359 as hw
+import hw2_12345678 as hw
 
 
 def test(cases, func, max_time=None):
