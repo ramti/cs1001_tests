@@ -1,5 +1,5 @@
-import random
 import time
+import random
 import hw2_12345678 as hw
 
 
@@ -18,6 +18,18 @@ def test_with_time(cases, func):
             print(f"{func_pretty_name}: took {elapsed_time} seconds")
 
 
+def test_sum_divisors():
+    TESTS = [
+        ((1, ), 0),
+        ((4, ), 3),
+        ((220, ), 284),
+        ((64, ), 63),
+        ((60, ), 108)
+    ]
+
+    test_with_time(TESTS, hw.sum_divisors)
+
+
 def test_legal_par():
     TESTS = [
         (("[[{}<>[]]]", ), True),
@@ -25,7 +37,7 @@ def test_legal_par():
         (("[()][<>][[()]]", ), True),
         (("[(])", ), False),
         (("](())", ), False),
-         (("<<<{>>}>", ), False)
+        (("<<<{>>}>", ), False)
     ]
 
     test_with_time(TESTS, hw.legal_par)
@@ -39,6 +51,10 @@ def test_spiral_num():
     ]
 
     test_with_time(TESTS, hw.spiral_sum)
+
+
+def int2bin(num):
+    return bin(num)[2:]
 
 
 def test_binary():
@@ -57,16 +73,16 @@ def test_binary():
         # bin1 >= bin2
         bin1 = random.randint(0, 100000)
         bin2 = random.randint(0, bin1)
-        bin1_str = bin(bin1)[2:]
-        bin2_str = bin(bin2)[2:]
+        bin1_str = int2bin(bin1)
+        bin2_str = int2bin(bin2)
         TESTS_SUB.append((
-            (bin1_str, bin2_str), bin(bin1 - bin2)[2:]
+            (bin1_str, bin2_str), int2bin(bin1 - bin2)
         ))
 
-        TESTS_INC.append(((bin2_str,), bin(bin2 + 1)[2:]))
+        TESTS_INC.append(((bin2_str,), int2bin(bin2 + 1)))
 
         if bin1 != 0:
-            TESTS_DEC.append(((bin1_str,), bin(bin1 - 1)[2:]))
+            TESTS_DEC.append(((bin1_str,), int2bin(bin1 - 1)))
 
         if bin1 == bin2:
             TESTS_LEQ.append(((bin1_str, bin2_str), True))
@@ -75,7 +91,7 @@ def test_binary():
             TESTS_LEQ.append(((bin2_str, bin1_str), True))
 
         if bin2 != 0:
-            TESTS_DIV.append(((bin1_str, bin2_str), bin(bin1 // bin2)[2:]))
+            TESTS_DIV.append(((bin1_str, bin2_str), int2bin(bin1 // bin2)))
 
     for cases, func in TESTS:
         test_with_time(cases, func)
@@ -126,6 +142,7 @@ def test_max_div_seq():
 
 
 def run_all_tests():
+    test_sum_divisors()
     test_legal_par()
     test_spiral_num()
     test_binary()
