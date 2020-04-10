@@ -51,7 +51,7 @@ def test_spiral_num():
         ((100001, ), 666691667100001)
     ]
 
-    test(TESTS, hw.spiral_sum)
+    test(TESTS, hw.spiral_sum, max_time=1)
 
 
 def int2bin(num):
