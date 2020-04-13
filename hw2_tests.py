@@ -1,5 +1,6 @@
 import time
 import random
+import traceback
 import hw2_12345678 as hw
 
 
@@ -8,7 +9,12 @@ def test(cases, func, max_time=None):
         func_pretty_name = f"{func.__name__}({', '.join(str(i) for i in args)})"
 
         start = time.perf_counter()
-        result = func(*args)
+        try:
+            result = func(*args)
+        except Exception:
+            print(f"{func_pretty_name}: an error has occured during function\n", traceback.format_exc())
+            continue
+
         end = time.perf_counter()
         if result != expected_result:
             print(f"{func_pretty_name}: expected {expected_result}, got {result}")
@@ -95,7 +101,7 @@ def test_binary():
             TESTS_DIV.append(((bin1_str, bin2_str), int2bin(bin1 // bin2)))
 
     for cases, func in TESTS:
-        test(cases, func, max_time=10)
+        test(cases, func, max_time=5)
 
 
 def test_has_repeat():
@@ -143,14 +149,25 @@ def test_max_div_seq():
 
 
 def run_all_tests():
-    test_sum_divisors()
-    test_legal_par()
-    test_spiral_num()
-    test_binary()
-    test_has_repeat()
-    test_reading()
-    test_max_div_seq()
-    hw.test()
+    print("Running lecturers tests...")
+    try:
+        hw.test()
+    except Exception:
+        print(f"An error has occured during lecturer tests:\n", traceback.format_exc())
+
+    ALL_TESTS = [
+        test_sum_divisors,
+        test_legal_par,
+        test_spiral_num,
+        test_has_repeat,
+        test_reading,
+        test_max_div_seq,
+        test_binary
+    ]
+
+    for test_func in ALL_TESTS:
+        print(f"Running {test_func.__name__}...")
+        test_func()
 
 
 if __name__ == "__main__":
