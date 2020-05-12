@@ -29,7 +29,28 @@ def test(cases, func, max_time=None, checker_func=checker_equals):
                 print(f"{func_pretty_name}: took {elapsed_time} seconds")
 
 
+def test_win():
+    tests = [
+        ((3, 3), False),
+        ((3, 4), True),
+        ((1, 1), False),
+        ((1, 2), True)
+    ]
+
+    test(tests, hw.win)
+    test(tests, hw.win_fast)
+
+
 def test_had_complete():
+    tests = [
+        ((0, 0, 0), 0),
+        ((2, 3, 2), 1),
+        ((3, 4, 4), 1),
+
+    ]
+
+    test(tests, hw.had_local)
+
     tests = [
         ((0,), [[0]]),
         ((1,), [[0, 0], [0, 1]]),
@@ -93,11 +114,12 @@ def test_distance():
         tests.append((reversed_args, expected))
 
     test(tests, hw.distance)
-    #test(tests, hw.distance_fast)
+    test(tests, hw.distance_fast)
 
 
 def run_all_tests():
     all_tests = [
+        test_win,
         test_had_complete,
         test_subset_sum,
         test_distance
