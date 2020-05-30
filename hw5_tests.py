@@ -1,3 +1,4 @@
+import pytest
 import time
 import traceback
 import hw5_316499359 as hw
@@ -7,7 +8,7 @@ def checker_equals(func, expected):
     return func == expected
 
 
-def test_case(args, expected_result, func, max_time=None, checker_func=checker_equals):
+def run_single_case(args, expected_result, func, max_time=None, checker_func=checker_equals):
     func_pretty_name = f"{func.__name__}({', '.join(repr(i) for i in args)})"
 
     start = time.perf_counter()
@@ -27,9 +28,9 @@ def test_case(args, expected_result, func, max_time=None, checker_func=checker_e
             print(f"{func_pretty_name}: took {elapsed_time} seconds")
 
 
-def test_cases(cases, func, max_time=None, checker_func=checker_equals):
+def run_all_cases(cases, func, max_time=None, checker_func=checker_equals):
     for args, expected_result in cases:
-        test_case(args, expected_result, func, max_time, checker_func)
+        run_single_case(args, expected_result, func, max_time, checker_func)
 
 
 def test_perm():
@@ -47,7 +48,7 @@ def test_perm():
         perm_obj = hw.Permutation(perm)
         return perm_obj.perm
 
-    test_cases(cases, test_perm_validation)
+    run_all_cases(cases, test_perm_validation)
 
     # __getitem__
     cases = [
@@ -60,7 +61,7 @@ def test_perm():
         perm_obj = hw.Permutation(perm)
         return perm_obj[i]
 
-    test_cases(cases, test_perm_getitem)
+    run_all_cases(cases, test_perm_getitem)
 
     # compose
     cases = [
@@ -72,7 +73,7 @@ def test_perm():
         perm_obj2 = hw.Permutation(p2)
         return perm_obj1.compose(perm_obj2).perm
 
-    test_cases(cases, test_perm_compose)
+    run_all_cases(cases, test_perm_compose)
 
     # inv
     cases = [
@@ -83,7 +84,7 @@ def test_perm():
         perm_obj = hw.Permutation(perm)
         return perm_obj.inv().perm
 
-    test_cases(cases, test_perm_inv)
+    run_all_cases(cases, test_perm_inv)
 
     # compose_list
     cases = [
@@ -94,7 +95,7 @@ def test_perm():
         lst = [hw.Permutation(perm) for perm in perms]
         return hw.compose_list(lst).perm
 
-    test_cases(cases, test_perm_compose)
+    run_all_cases(cases, test_perm_compose)
 
     # order
     cases = [
@@ -106,10 +107,10 @@ def test_perm():
     def test_perm_order(perm):
         return hw.Permutation(perm).order()
 
-    test_cases(cases, test_perm_order)
+    run_all_cases(cases, test_perm_order)
 
 
-def test_binary_tree():#
+def test_binary_tree():
     def build_tree(tree_items):
         tree_obj = hw.Binary_search_tree()
         for key, val in tree_items:
@@ -128,7 +129,8 @@ def test_binary_tree():#
 
     def test_max_sum(tree_items):
         return build_tree(tree_items).max_sum()
-    test_cases(cases, test_max_sum)
+
+    run_all_cases(cases, test_max_sum)
 
     # is_balanced
     cases = [
@@ -139,7 +141,8 @@ def test_binary_tree():#
 
     def test_is_balanced(tree_items):
         return build_tree(tree_items).is_balanced()
-    test_cases(cases, test_is_balanced)
+
+    run_all_cases(cases, test_is_balanced)
 
     # diam
     cases = [
@@ -150,25 +153,159 @@ def test_binary_tree():#
 
     def test_diam(tree_items):
         return build_tree(tree_items).diam()
-    test_cases(cases, test_diam)
 
+    run_all_cases(cases, test_diam)
 
-def run_all_tests():
-    all_tests = [
-        test_perm,
-        test_binary_tree
+    # same_tree
+    cases = [
+        (([], []), True),
+        (([], [1]), False),
+        (([1, 2, 3, 4, 5, 6], [2, 1, 3, 4, 6]), False),
+        (([3, 2, 1, 4, 5, 6], [3, 4, 5, 6, 2, 1]), True),
+        (([3, 2, 1, 4, 5, 6], [3, 4, 2, 5, 6, 1]), True),
+        (([1, 2, 3, 4, 5, 6], [2, 1, 3, 4, 5, 6]), False),
     ]
 
-    for test_func in all_tests:
-        print(f"Running {test_func.__name__}...")
-        test_func()
+    run_all_cases(cases, hw.same_tree)
 
-    # print("Running lecturers tests...")
-    # try:
-    #     hw.test()
-    # except Exception:
-    #     print(f"An error has occured during lecturer tests:\n", traceback.format_exc())
+
+def test_dllist():
+    # insert
+    dllist = hw.DLList()
+    dllist.insert(5)
+    assert dllist.len == 1
+    assert dllist.head is dllist.tail
+    assert dllist.head.value == 5
+    assert dllist.head.next is dllist.head.prev is None
+
+    dllist.insert(7)
+    assert dllist.len == 2
+    assert dllist.head is dllist.tail.prev
+    assert dllist.head.value == 5
+    assert dllist.tail.value == 7
+    assert dllist.head.prev is dllist.tail.next is None
+
+    # reverse
+    dllist.insert(9)
+    dllist.insert(1)
+    dllist.insert(6)
+    dllist.reverse()
+    assert dllist.len == 5
+    assert dllist.head.value == 6
+    assert dllist.head.next.value == 1
+    assert dllist.head.prev is None
+    assert dllist.tail.value == 5
+    assert dllist.tail.prev.value == 7
+    assert dllist.tail.next is None
+
+    dllist = hw.DLList()
+    dllist.reverse()
+    assert dllist.head is dllist.tail is None
+
+    dllist.insert(1)
+    dllist.reverse()
+    assert dllist.head is dllist.tail
+
+    # remove
+    dllist = hw.DLList()
+    dllist.insert(1)
+    dllist.insert(2)
+    dllist.insert(3)
+
+    dllist.delete_node(dllist.head.next)  # delete 2
+    assert dllist.len == 2
+    assert dllist.head.value == 1
+    assert dllist.tail.value == 3
+    assert dllist.head.next is dllist.tail
+    assert dllist.tail.prev is dllist.head
+
+    dllist.delete_node(dllist.head)  # delete 1
+    assert dllist.len == 1
+    assert dllist.head is dllist.tail
+    assert dllist.head.next is dllist.head.prev is None
+
+    dllist.delete_node(dllist.head)  # delete 3
+    assert dllist.len == 0
+    assert dllist.head is dllist.tail is None
+
+    dllist = hw.DLList()
+    dllist.insert(1)
+    dllist.insert(2)
+    dllist.insert(3)
+    dllist.insert(4)
+
+    dllist.delete_node(dllist.head)  # delete head
+    assert dllist.len == 3
+    assert dllist.head.value == 2
+    assert dllist.head.prev is None
+    assert dllist.head.next.prev is dllist.head
+
+    dllist.delete_node(dllist.tail)  # delete tail
+    assert dllist.len == 2
+    assert dllist.tail.value == 3
+    assert dllist.tail.next is None
+    assert dllist.tail.prev.next is dllist.tail
+
+    # rotate
+    dllist = hw.DLList()
+    dllist.insert(1)
+    dllist.rotate(0)
+    assert dllist.head is dllist.tail
+    assert dllist.head.next is dllist.head.prev is None
+
+    dllist.insert(2)
+    dllist.rotate(1)
+    assert dllist.head.value == 2
+    assert dllist.tail.value == 1
+    assert dllist.head.prev is dllist.tail.next is None
+    assert dllist.head.next is dllist.tail
+    assert dllist.tail.prev is dllist.head
+
+    dllist.rotate(1)
+    dllist.insert(3)
+    dllist.insert(4)
+    dllist.rotate(2)
+    assert dllist.head.value == 3
+    assert dllist.tail.value == 2
+    assert dllist.head.prev is dllist.tail.next is None
+    assert dllist.tail.prev.next is dllist.tail
+    assert dllist.head.next.prev is dllist.head
+
+
+def test_prefix_suffix_overlap():
+    def checker_unordered_list(func, expected):
+        return sorted(func) == sorted(expected)
+
+    # prefix_suffix_overlap
+    cases = [
+        ((["a" * 10, "b" * 4 + "a" * 6, "c" * 5 + "b" * 4 + "a"], 5), [(0, 1), (1, 2)]),
+        ((["aaa", "aaa"], 3), [(0, 1), (1, 0)]),
+        ((["aba", "cab"], 1), []),
+    ]
+
+    run_all_cases(cases, hw.prefix_suffix_overlap, checker_func=checker_unordered_list)
+    run_all_cases(cases, hw.prefix_suffix_overlap_hash1, checker_func=checker_unordered_list)
+    run_all_cases(cases, hw.prefix_suffix_overlap_hash2, checker_func=checker_unordered_list)
+
+    # find
+    dict_obj = hw.Dict(3)
+    assert dict_obj.find(56) == []
+
+    dict_obj.insert(3, "a")
+    dict_obj.insert(56, "a")
+    dict_obj.insert(56, "b")
+    dict_obj.insert(57, "c")
+    assert dict_obj.find(56) == ["a", "b"]
+    assert dict_obj.find(57) == ["c"]
+
+
+def test_lecturer():
+    hw.test()
 
 
 if __name__ == "__main__":
-    run_all_tests()
+    import sys
+
+    args = list(sys.argv)
+    args.append("-s")
+    pytest.main(args)
