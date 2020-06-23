@@ -96,6 +96,19 @@ def test_generator():
         next(Z)
 
 
+def test_lzw_compress():
+    cases = [
+        (('abc' * 20,), ['a', 'b', 'c', [3, 31], [3, 26]]),
+        (('how much wood would the wood chuck chuck if\nthe wood chuck would chuck wood should could hood',),
+         ['h', 'o', 'w', ' ', 'm', 'u', 'c', 'h', ' ', 'w', 'o', 'o', 'd', [5, 3], 'u', 'l', 'd', ' ', 't', 'h', 'e',
+          [15, 6], 'c', 'h', 'u', 'c', 'k', [6, 7], 'i', 'f', '\n', [24, 15], [45, 6], [12, 8], [23, 3], 's', 'h',
+          [18, 6], [6, 5], 'h', [18, 3]]
+         ),
+    ]
+
+    run_all_cases(cases, hw.LZW_compress)
+
+
 def test_fingerprint():
     cases = [
         (('amirrub', 'rubamira'), False),
@@ -104,6 +117,7 @@ def test_fingerprint():
         (('', ''), True),
         (('amirrub', 'amirrub'), True),
         (('amirrub', 'rubamir'), True),
+        (('amirrub', 'ubamirr'), True),
         (('amirrub', 'rabamir'), False),
         (('abbbbba', 'bbaabbb'), True)
     ]
