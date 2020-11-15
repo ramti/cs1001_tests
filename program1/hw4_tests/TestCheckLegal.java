@@ -16,12 +16,6 @@ public class TestCheckLegal {
     }
 
     @Test
-    public void testCheckLegalBad3() {
-        char[] puzzle = {WordPuzzle.HIDDEN_CHAR, WordPuzzle.HIDDEN_CHAR, 'f', WordPuzzle.HIDDEN_CHAR, WordPuzzle.HIDDEN_CHAR};
-        Assert.assertFalse(WordPuzzle.checkLegal("queen", puzzle));
-    }
-
-    @Test
     public void testCheckLegalBad4() {
         char[] puzzle = {WordPuzzle.HIDDEN_CHAR, WordPuzzle.HIDDEN_CHAR, WordPuzzle.HIDDEN_CHAR, WordPuzzle.HIDDEN_CHAR, WordPuzzle.HIDDEN_CHAR};
         Assert.assertFalse(WordPuzzle.checkLegal("queen", puzzle));
