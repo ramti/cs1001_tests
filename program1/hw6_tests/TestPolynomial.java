@@ -46,6 +46,15 @@ public class TestPolynomial {
     }
 
     @Test
+    public void testGetCoefficient() {
+        Polynomial polynomial = new Polynomial(new double[]{1, 0, 3});
+        Assert.assertEquals(1, polynomial.getCoefficient(0), epsilon);
+        Assert.assertEquals(0, polynomial.getCoefficient(1), epsilon);
+        Assert.assertEquals(3, polynomial.getCoefficient(2), epsilon);
+        Assert.assertEquals(0, polynomial.getCoefficient(3), epsilon);
+    }
+
+    @Test
     public void testSetCoefficient() {
         Polynomial polynomial = new Polynomial(new double[]{1, 0, 3});
         polynomial.setCoefficient(0, 0);
