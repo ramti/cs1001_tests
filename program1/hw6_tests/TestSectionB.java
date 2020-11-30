@@ -13,7 +13,7 @@ public class TestSectionB {
 
     @Test
     public void testMax() {
-        int[] arr = new int[]{1, -555, 0};
+        int[] arr = new int[]{-555, 0, 1};
         Assert.assertTrue(SectionB.max(arr) > 1);
     }
 
