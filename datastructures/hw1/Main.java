@@ -11,9 +11,13 @@ public class Main {
         tree.insert(4, "4");
         tree.insert(5, "5");
 
-        TreePrinter.printWithVirtual(tree);
-        tree.delete(2);
+        System.out.println("Tree:");
         TreePrinter.print(tree);
-
+        System.out.println("With virtual:");
+        TreePrinter.printWithVirtual(tree);
+        System.out.println("With ranks:");
+        TreePrinter.printWithRanks(tree);
+        System.out.println("With size:");
+        TreePrinter.printWithSize(tree);
     }
 }

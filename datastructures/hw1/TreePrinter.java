@@ -47,6 +47,26 @@ public class TreePrinter<T> {
         printer.printTree(tree.getRoot());
     }
 
+    public static void printWithRanks(AVLTree tree) {
+        TreePrinter<AVLTree.IAVLNode> printer =
+                new TreePrinter<AVLTree.IAVLNode>(n -> String.format("%d (%d)", n.getKey(), n.getHeight()),
+                        (n -> n.getLeft() != null && n.getLeft().isRealNode() ? n.getLeft() : null),
+                        (n -> n.getRight() != null && n.getRight().isRealNode() ? n.getRight() : null));
+
+        printer.setSquareBranches(true);
+        printer.printTree(tree.getRoot());
+    }
+
+    public static void printWithSize(AVLTree tree) {
+        TreePrinter<AVLTree.IAVLNode> printer =
+                new TreePrinter<AVLTree.IAVLNode>(n -> String.format("%d (%d)", n.getKey(), n.getSize()),
+                        (n -> n.getLeft() != null && n.getLeft().isRealNode() ? n.getLeft() : null),
+                        (n -> n.getRight() != null && n.getRight().isRealNode() ? n.getRight() : null));
+
+        printer.setSquareBranches(true);
+        printer.printTree(tree.getRoot());
+    }
+
     public static void printWithVirtual(AVLTree tree) {
         TreePrinter<AVLTree.IAVLNode> printer =
                 new TreePrinter<AVLTree.IAVLNode>(n -> String.valueOf(n.getKey()),
