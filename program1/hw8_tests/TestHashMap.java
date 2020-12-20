@@ -74,15 +74,21 @@ public class TestHashMap {
     }
 
     @Test(expected = IllegalItemException.class)
-    public void TestIllegalItemException1() throws IllegalItemException {
+    public void TestIllegalItem1() throws IllegalItemException {
         IHistogram<String> hist = new HashMapHistogram<>();
         hist.removeItem("aa");
     }
 
     @Test(expected = IllegalItemException.class)
-    public void TestIllegalItemException2() throws IllegalItemException, IllegalKValueException {
+    public void TestIllegalItem2() throws IllegalItemException, IllegalKValueException {
         IHistogram<String> hist = new HashMapHistogram<>();
         hist.removeItemKTimes("aa", 10);
+    }
+
+    @Test(expected = IllegalItemException.class)
+    public void TestIllegalItem3() throws IllegalItemException, IllegalKValueException {
+        IHistogram<String> hist = new HashMapHistogram<>();
+        hist.removeItemKTimes("aa", -2);
     }
 
     @Test(expected = IllegalKValueException.class)
@@ -95,6 +101,7 @@ public class TestHashMap {
     @Test(expected = IllegalKValueException.class)
     public void TestIllegalK2() throws IllegalItemException, IllegalKValueException {
         IHistogram<String> hist = new HashMapHistogram<>();
+        hist.addItem("aa");
         hist.removeItemKTimes("aa", -2);
     }
 
